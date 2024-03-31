@@ -10,8 +10,8 @@ def home(request):
 def faclogin(request):
     if request.method=="POST":
         user=EmailBackEnd.authenticate(request,
-                                       username=request.POST.get('email'),
-                                       password=request.POST.get('password'),)
+            username=request.POST.get('email'),
+            password=request.POST.get('password'),)
         if user!=None:
             login(request,user)
             user_type = user.user_type
