@@ -4,9 +4,9 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
-    <meta name="generator" content="Jekyll v4.1.1">
+    {% comment %} <meta name="description" content=""> {% endcomment %}
+    {% comment %} <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Jekyll v4.1.1"> {% endcomment %}
     
     <title>SMART ATTENDANCE MANAGER</title>
     
@@ -15,6 +15,9 @@
     <link href="{% static 'assets/dist/css/bootstrap.min.css'%}" rel="stylesheet">
     <link type="text/css" rel="stylesheet" href="styling.css">
     <link href="{% static 'C:\Users\Acer\Desktop\Python Project\Attendence_system\static\css\dashboard.css' %}" rel="stylesheet">
+    <title>
+      {% block title %}{% endblock title %}|Attendance
+    </title>
   </head>
 
   <body>
@@ -64,7 +67,7 @@
           </li>
 
           <p>
-            <a class="nav-link active" data-toggle="collapse" data-target="#collapseExample" aria-expanded="true" aria-controls="collapseExample">
+            <a class="nav-link active" href = "attendence" data-toggle="collapse" data-target="#collapseExample" aria-expanded="true" aria-controls="collapseExample">
               <span data-feather="calendar"></span>
               Attendance
               <span class="sr-only"></span>
@@ -111,11 +114,11 @@
             </div>
           </div>
         </div>
+      {% block body %}{% endblock body %}
     </div>
-</div>
-</div>
+  </div>
 
-{% block body %}{% endblock body %}
+</div>
 
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>

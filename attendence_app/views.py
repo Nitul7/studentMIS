@@ -1,14 +1,11 @@
-
-
-# Create your views here.
-
-
 from django.shortcuts import render,redirect,HttpResponse
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from attendence_app.EmailBackEnd import EmailBackEnd
 from django.contrib import messages
+from attendence_app.models import *
+from .models import Students
 
 # @login_required(login_url='/')
 # @login_required(login_url='index.html')
@@ -58,17 +55,29 @@ def home(request):
         return redirect("/loginStudent")
     else:
         if request.user.is_superuser:
-            return render (request,"staff_index.html")
+            context = {
+                "attendences": Attendence.objects.all()
+            }
+            return render (request,"staff_index.html",context)
         else:
             return render (request,"student_index.html")
         
 def base(request):
     return render(request, "base.html")
 
+
 def profile(request):
-    return HttpResponse ('This is profile')
+    current_user = request.user
+    context = {
+        'records':Students.objects.filter(user_name = current_user)
+    }
+    return render (request,"profile.html",context)
+
 def attendence(request):
-    return HttpResponse ('This is attendence')
+    context = {
+        "attendences": Attendence.objects.all()
+    }
+    return render (request,"attendence.html",context)
 
 # def faclogin(request):
 #     if request.method=="POST":

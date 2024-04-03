@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% block body %}
+hello profile
+    {% for record in records %}
+        <table>
+            <tbody>
+                <tr>
+                    <td>
+                        First Name:
+                    </td>
+                    <td>
+                        {{record.user.fname}}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Last Name:
+                    </td>
+                    <td>
+                        {{record.user.lname}}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Address:
+                    </td>
+                    <td>
+                        {{record.address}}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Email:
+                    </td>
+                    <td>
+                        {{record.user.email}}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Guardian:
+                    </td>
+                    <td>
+                        {{record.guardian}}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Faculty:
+                    </td>
+                    <td>
+                        {{record.faculty}}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Programme:
+                    </td>
+                    <td>
+                        {{record.programe}}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    {% endfor %}
+{% endblock body %}
