@@ -10,4 +10,5 @@ class UserModel(UserAdmin):
 admin.site.register(CustomUser,UserModel)
 admin.site.register(Students)
 admin.site.register(Attendence)
+admin.site.register(Subjects)
 

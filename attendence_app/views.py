@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from attendence_app.EmailBackEnd import EmailBackEnd
 from django.contrib import messages
 from attendence_app.models import *
-from .models import Students
+from .models import *
 
 # @login_required(login_url='/')
 # @login_required(login_url='index.html')
@@ -74,10 +74,20 @@ def profile(request):
     return render (request,"profile.html",context)
 
 def attendence(request):
-    context = {
-        "attendences": Attendence.objects.all()
+    main_context = {
+        "subjects": Subjects.objects.all()
     }
-    return render (request,"attendence.html",context)
+    if request.method == "POST":
+        sub_sem = request.POST.get("subject_semister")
+        sub_name = request.POST.get("subject_name")
+        semister = int(sub_sem)
+        context = {
+            "students": Students.objects.filter(current_semister=semister)
+        }
+        return render(request, "take_attendence.html", context)
+    else:
+        return render(request, "select_attendence.html", main_context)
+
 
 # def faclogin(request):
 #     if request.method=="POST":

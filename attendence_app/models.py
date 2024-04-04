@@ -18,22 +18,32 @@ class BaseModel(models.Model):
     class Meta:
         abstract=True
 
+class Subjects(BaseModel):
+    subject = models.CharField(max_length=50)
+    subject_faculty = models.CharField(max_length=25)
+    subject_semister = models.CharField(max_length=10,default='2')
+    def __str__(self):
+        return self.subject
+
+
 class Students(BaseModel):
     # 123happy@123
     user_name = models.OneToOneField(get_user_model(),related_name="student_username" ,on_delete=models.CASCADE)
     roll = models.CharField( max_length = 6)
-    year = models.CharField(max_length=1)
-    semister = models.CharField(max_length=10)
-    faculty = models.CharField(max_length=25)
-    programe = models.CharField(max_length=25)
+    current_year = models.CharField(max_length=1)
+    current_semister = models.CharField(max_length=10)
+    student_faculty = models.CharField(max_length=25)
+    student_programe = models.CharField(max_length=25) 
     address = models.CharField(max_length=50)
     phone = models.CharField(max_length=10)
     guardian = models.CharField(max_length=35)
     def __str__(self):
         return self.roll
 
+
 class Attendence(BaseModel):
     roll = models.ForeignKey(Students,related_name='students',on_delete=models.CASCADE)
+    subjects = models.ForeignKey(Subjects, on_delete=models.CASCADE)
     present_days = models.IntegerField()
     absent_days = models.IntegerField()
     is_present = models.BooleanField(default=False)

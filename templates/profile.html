@@ -1,5 +1,16 @@
 {% extends 'base.html' %}
+{% block title %}profile{% endblock title %}
 {% block body %}
+<div class="card">
+          <div class="card-header">
+            <div class="row">
+              <div class="col-md-9">
+                My Profile
+              </div>
+              
+            </div>
+          </div>
+        </div>
 hello profile
     {% for record in records %}
         <table>
@@ -46,10 +57,26 @@ hello profile
                 </tr>
                 <tr>
                     <td>
+                        Year:
+                    </td>
+                    <td>
+                        {{record.current_year}}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Semister:
+                    </td>
+                    <td>
+                        {{record.current_semister}}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
                         Faculty:
                     </td>
                     <td>
-                        {{record.faculty}}
+                        {{record.student_faculty}}
                     </td>
                 </tr>
                 <tr>
@@ -57,7 +84,7 @@ hello profile
                         Programme:
                     </td>
                     <td>
-                        {{record.programe}}
+                        {{record.student_programe}}
                     </td>
                 </tr>
             </tbody>
