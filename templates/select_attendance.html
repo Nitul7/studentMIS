@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block body %}
+<form action="/attendance" method="POST">
+    {% csrf_token %}
+    <select name="subject_name" id = "subject_name" class="form-control">
+        <label for="category" class="form-label">Choose Subject</label>
+        <option value="choose">Choose</option>
+        {% for subject in subjects %}
+            <option value="{{subject.subject}}" name="subject_semister" id="subject_semister">
+                {{subject.subject}}
+                {% comment %} <input type="hidden" name="subject_semister" id="subject_semister" value=" {{subject.subject_semister}}"> {% endcomment %}
+            </option>
+            {% endfor %}
+            </select>
+            <button type="submit">Upload</button>
+</form>
+{% endblock body %}

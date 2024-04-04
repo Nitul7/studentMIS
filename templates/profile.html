@@ -11,16 +11,17 @@
             </div>
           </div>
         </div>
-hello profile
-    {% for record in records %}
-        <table>
-            <tbody>
+<h2 style="text-align:center;">WELCOME TO YOUR PROFILE</h2><br>
+<table>
+    {% if user.is_superuser %}
+        
+            <tbody style=" font-size: 20px;">
                 <tr>
                     <td>
                         First Name:
                     </td>
                     <td>
-                        {{record.user.fname}}
+                        {{staff_records.first_name}}
                     </td>
                 </tr>
                 <tr>
@@ -28,15 +29,7 @@ hello profile
                         Last Name:
                     </td>
                     <td>
-                        {{record.user.lname}}
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        Address:
-                    </td>
-                    <td>
-                        {{record.address}}
+                        {{staff_records.last_name}}
                     </td>
                 </tr>
                 <tr>
@@ -44,50 +37,79 @@ hello profile
                         Email:
                     </td>
                     <td>
-                        {{record.user.email}}
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        Guardian:
-                    </td>
-                    <td>
-                        {{record.guardian}}
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        Year:
-                    </td>
-                    <td>
-                        {{record.current_year}}
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        Semister:
-                    </td>
-                    <td>
-                        {{record.current_semister}}
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        Faculty:
-                    </td>
-                    <td>
-                        {{record.student_faculty}}
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        Programme:
-                    </td>
-                    <td>
-                        {{record.student_programe}}
+                        {{staff_records.email}}
                     </td>
                 </tr>
             </tbody>
-        </table>
-    {% endfor %}
+    {% else %}
+        {% for record in records %}
+                <tbody>
+                    <tr>
+                        <td>
+                            Name:
+                        </td>
+                        <td>
+                            {{user.get_full_name}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Address:
+                        </td>
+                        <td>
+                            {{record.address}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Email:
+                        </td>
+                        <td>
+                            {{user.email}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Guardian:
+                        </td>
+                        <td>
+                            {{record.guardian}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Year:
+                        </td>
+                        <td>
+                            {{record.current_year}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Semester:
+                        </td>
+                        <td>
+                            {{record.current_semister}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Faculty:
+                        </td>
+                        <td>
+                            {{record.student_faculty}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Programme:
+                        </td>
+                        <td>
+                            {{record.student_programe}}
+                        </td>
+                    </tr>
+                </tbody>
+                {% endfor %}
+                {% endif %}
+            </table>
 {% endblock body %}

@@ -23,7 +23,7 @@
   <nav class="navbar navbar-dark sticky-top flex-md-nowrap p-0 shadow" style="background-color: #5c95b8;">
     <a class="navbar-brand" href="#">
       <img src="{% static 'C:\Users\Acer\Desktop\Python Project\Attendence_system\static\img\images.jpg' %}" width="25" height="25" class="d-inline-block align-top" alt="">
-      Attendence System
+      Attendance System
     </a>
     <nav class="navbar navbar-dark p-1">
         <span class="navbar-text">
@@ -48,14 +48,14 @@
     <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
       <div class="sidebar-sticky pt-3">
         <ul class="nav flex-column">
-          <li class="nav-item">
+          {% comment %} <li class="nav-item">
             <a class="nav-link" href="home" >
-              {% comment %} href={% url 'home'  %} {% endcomment %}
+              href={% url 'home'  %}
               <span data-feather="home"></span>
               Home 
               <span class="sr-only">(current)</span>
             </a>
-          </li>
+          </li> {% endcomment %}
           <li class="nav-item">
             <a class="nav-link" href = '/profile'>
               {% comment %} href={% url 'staff_home'  %} {% endcomment %}
@@ -66,7 +66,7 @@
           </li>
 
           <p>
-            <a class="nav-link active" href = "/attendence" >
+            <a class="nav-link" href = "/attendance" >
               <span data-feather="calendar"></span>
               Attendance
               <span class="sr-only"></span>
@@ -94,25 +94,8 @@
       </div>
     </nav>
 
-    <div class="container" style="margin-top:30px">
-        <div class="card">
-          <div class="card-header">
-            <div class="row">
-              <div class="col-md-9">
-                Attendance List
-              </div>
-              <div class="col-md-3" align="right">
-                <button type="button" id="add_button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#exampleModalCenter">
-                  Add <span data-feather="plus-square">
-                </button>
-                <button type="button" id="edit_button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#exampleModal">
-                  Edit <span data-feather="edit">
-                </button>
-                {% comment %} <form action={% url 'fac_report'  %} method="POST" style="display:inline;">{% csrf_token %}<button type=submit name={{clat.class_id}}${{cout.course_id}} class="btn btn-info btn-sm" style="display:inline;">Report <span data-feather="download"></button></form> {% endcomment %}
-              </div>
-            </div>
-          </div>
-        </div>
+    <div class="container" style="margin-top:30px; padding-left: 100px">
+        
       {% block body %}{% endblock body %}
     </div>
   </div>
@@ -126,5 +109,75 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.9.0/feather.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
 		<script src="{% static 'js/dashboard.js' %}"></script>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.7.16/dist/vue.js"></script>
+    <script>
+      var app = new Vue({
+        el: '#app',
+        delimiters: ['[[', ']]'],
+        data() {
+            return {
+                category: '{{category}}',
+                questions: [],
+                totalAttemptedMarks: 0,
+                totalMarksObtained: 0,
+            }
+        },
+        methods: {
+            getQuestions(){
+                var _this = this
+                fetch(/api/get-quiz/?category=${_this.category})
+                .then(response => response.json())
+                .then(result =>{
+                    console.log(result)
+                    _this.questions = result.data
+                })
+                .catch(error => {
+                  console.error('Error:', error);
+                }); 
+            },
+            {% comment %} checkAnswer(event,uid,marks){
+              var obtained=0
+                this.questions.map(question=>{
+                    answer=question.answer
+                    for(var i=0;i<answer?.length;i++){
+                        if(answer[i].answer == event.target.value){
+                            if(answer[i].is_correct){
+                              
+                              console.log('Your answer is correct',obtained += question.marks)
+                            }
+                            else{
+                                console.log('Your answer is incorrect')
+                            }
+                        }
+                    }
+                })
+                console.log(event.target.value,uid)
+            } {% endcomment %}
+
+            checkPresent(event, uid, is_present) {
+              var selectedAnswer = event.target.value;
+              var isCorrect = false;
+              this.questions.forEach(question => {
+                  if (question.uid === uid) {
+                      question.answer.forEach(answer => {
+                          if (answer.answer === selectedAnswer && answer.is_correct) {
+                              isCorrect = true;
+                          }
+                      });
+                  }
+              });
+              if (isCorrect) {
+                  this.totalMarksObtained += parseInt(marks);
+              }
+              this.totalAttemptedMarks += parseInt(marks);
+          }
+        },
+        created() {
+            this.getQuestions()
+        },
+        });
+    </script>
   </body>
 </html>
