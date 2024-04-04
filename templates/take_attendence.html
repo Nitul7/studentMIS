@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block title %}take_attendance{% endblock title %}
+{% block body %}
+    <p>This is the take attendance page</p>
+    {% for student in students %}
+    hello world
+        {{ student.roll }}
+        {{ student.current_year }}
+        {{ student.current_semister }}
+    {% endfor %}
+{% endblock body %}

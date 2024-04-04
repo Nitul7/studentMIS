@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% block title %}profile{% endblock title %}
+{% block body %}
+<div class="card">
+          <div class="card-header">
+            <div class="row">
+              <div class="col-md-9">
+                My Profile
+              </div>
+              
+            </div>
+          </div>
+        </div>
+hello profile
+    {% for record in records %}
+        <table>
+            <tbody>
+                <tr>
+                    <td>
+                        First Name:
+                    </td>
+                    <td>
+                        {{record.user.fname}}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Last Name:
+                    </td>
+                    <td>
+                        {{record.user.lname}}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Address:
+                    </td>
+                    <td>
+                        {{record.address}}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Email:
+                    </td>
+                    <td>
+                        {{record.user.email}}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Guardian:
+                    </td>
+                    <td>
+                        {{record.guardian}}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Year:
+                    </td>
+                    <td>
+                        {{record.current_year}}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Semister:
+                    </td>
+                    <td>
+                        {{record.current_semister}}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Faculty:
+                    </td>
+                    <td>
+                        {{record.student_faculty}}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Programme:
+                    </td>
+                    <td>
+                        {{record.student_programe}}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    {% endfor %}
+{% endblock body %}

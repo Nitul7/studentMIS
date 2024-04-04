@@ -15,22 +15,24 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path,include
 from django.conf import settings
 from django.conf.urls.static import static
-from . import views,student_views,staff_views
+# from . import views,student_views,staff_views
 
 urlpatterns = [
+    # path('admin/', admin.site.urls),
+    # path('',views.home, name= 'home'),
+    # path('faclogin',views.faclogin, name= 'faclogin'),
+    
+    # path('staff/home2.html',staff_views.HOME,name='staff_home2'),
+    # path('staff/home.html',staff_views.HOME,name='staff_home'),
+
+
+    # path('logout',views.logout_request, name="logout"),
+    
+    #new changes
     path('admin/', admin.site.urls),
-    path('',views.home, name= 'home'),
-    path('faclogin',views.faclogin, name= 'faclogin'),
-    
-    path('staff/home2.html',staff_views.HOME,name='staff_home2'),
-    path('staff/home.html',staff_views.HOME,name='staff_home'),
-
-
-    path('logout',views.logout_request, name="logout")
-    
-    
-
-]+static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
+    path('', include('attendence_app.urls')),
+]
+# +static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)

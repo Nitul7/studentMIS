@@ -14,34 +14,7 @@
 
 <link href="{% static 'assets/dist/css/bootstrap.min.css' %}" rel="stylesheet">
 
-    <style>
-      .bd-placeholder-img {
-        font-size: 1.125rem;
-        text-anchor: middle;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
-      }
-
-      @media (min-width: 768px) {
-        .bd-placeholder-img-lg {
-          font-size: 3.5rem;
-        }
-      }
-	.demo select {
-		border: 0 !important;  /*Removes border*/
-		-webkit-appearance: none;  /*Removes default chrome and safari style*/
-		-moz-appearance: none; /* Removes Default Firefox style*/
-        appearance:none;
-		background: #5c95b8 url(img/select-arrow.png) no-repeat 90% center;
-		width: 100px; /*Width of select dropdown to give space for arrow image*/
-		text-indent: 0.01px; /* Removes default arrow from firefox*/
-		text-overflow: "";  /*Removes default arrow from firefox*/ /*My custom style for fonts*/
-		color: #FFF;
-		padding: 5px;
-	}
-    </style>
+<link type="text/css" rel="stylesheet" href="styling.css">
     <!-- Custom styles for this template -->
     <link href="{% static 'C:\Users\Acer\Desktop\Python Project\Attendence_system\static\css\dashboard.css' %}" rel="stylesheet">
   </head>
@@ -53,12 +26,13 @@
   </a>
   <nav class="navbar navbar-dark p-1">
   <span class="navbar-text">
-    STAFF ACCOUNT
+    STUDENT ACCOUNT
   </span>
 </nav>
 <ul class="navbar-nav px-3">
     <li class="nav-item text-nowrap">
-      <a class="nav-link" href={% url 'logout'  %}>Log Out <span data-feather="log-out"></a>
+      <a class="nav-link" href="/logout">Log Out <span data-feather="log-out"></a>
+        {% comment %} href={% url 'logout'  %} {% endcomment %}
     </li>
   </ul> 
 </nav>
@@ -69,13 +43,15 @@
       <div class="sidebar-sticky pt-3">
         <ul class="nav flex-column">
           <li class="nav-item">
-		  <a class="nav-link active" href={% url 'staff_home'  %}>
-              <span data-feather="home"></span>
-              Home <span class="sr-only">(current)</span>
-            </a>
+		  <a class="nav-link active" href="/" >
+        {% comment %} href={% url 'staff_home'  %} {% endcomment %}
+        <span data-feather="home"></span>
+        Home <span class="sr-only">(current)</span>
+      </a>
           </li>
 		  <li class="nav-item">
-		  <a class="nav-link" href={% url 'staff_home'  %}>
+		  <a class="nav-link" href="/profile">
+        {% comment %} href={% url 'staff_home'  %} {% endcomment %}
               <span data-feather="user"></span>
               Profile <span class="sr-only"></span>
             </a>
