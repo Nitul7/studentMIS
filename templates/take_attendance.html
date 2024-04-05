@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% block title %}take_attendance{% endblock title %}
+{% block body %}
+<div class="card">
+    <div class="card-header">
+      <div class="row">
+        <div class="col-md-9">
+          Attendance List
+        </div>
+        <div class="col-md-3" align="right">
+          <button type="button" id="add_button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#exampleModalCenter">
+            Add <span data-feather="plus-square">
+          </button>
+          <button type="button" id="edit_button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#exampleModal">
+            Edit <span data-feather="edit">
+          </button>
+          {% comment %} <form action={% url 'fac_report'  %} method="POST" style="display:inline;">{% csrf_token %}<button type=submit name={{clat.class_id}}${{cout.course_id}} class="btn btn-info btn-sm" style="display:inline;">Report <span data-feather="download"></button></form> {% endcomment %}
+        </div>
+      </div>
+    </div>
+  </div>
+    <p>This is the take attendance page</p>
+    <form id="attendanceForm" action="/attendance" method="POST">
+        {% csrf_token %}
+        <div class="table-responsive" style="width: 96%; margin-left: 2%; padding-top: 2%;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Status</th>
+                        <th>Roll Number</th>
+                        <th>Current Year</th>
+                        <th>Current Semester</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for student in students %}
+                    <tr>
+                        <td>
+                            <input type="checkbox" value="True" id="{{ student.roll }}" name="{{ student.roll }}">
+                            <label for="{{ student.roll }}">
+                                Present {{ student.roll }}
+                            </label>
+                        </td>
+                        <td>{{ student.roll }}</td>
+                        <td>{{ student.current_year }}</td>
+                        <td>{{ student.current_semister }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <button type="submit">Submit</button>
+    </form>
+
+    <script>
+        // Add event listener to the form submission
+        document.getElementById("attendanceForm").addEventListener("submit", function(event) {
+            event.preventDefault(); // Prevent the default form submission
+            
+            // Iterate over each checkbox
+            document.querySelectorAll('input[type="checkbox"]').forEach(function(checkbox) {
+                if (checkbox.checked) {
+                    // Extract the roll number from the checkbox ID
+                    var roll = checkbox.id.split('_')[1];
+                    
+                    // Append an input field to the form dynamically
+                    var input = document.createElement("input");
+                    input.setAttribute("type", "hidden");
+                    input.setAttribute("name", "present_students");
+                    input.setAttribute("value", roll);
+                    document.getElementById("attendanceForm").appendChild(input);
+                }
+            });
+            
+            // Submit the form with the updated data
+            this.submit();
+        });
+    </script>
+{% endblock body %}

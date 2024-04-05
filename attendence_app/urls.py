@@ -7,10 +7,9 @@ urlpatterns = [
     path('loginStaff',views.loginStaff, name= 'loginStaff'),
     path('loginStudent',views.loginStudent, name= 'loginStudent'),
     path('logout',views.logoutUser, name= 'logout'),
-    
     path('home',views.home, name= 'home'),
     path('profile',views.profile, name= 'profile'),
-    path('attendence',views.attendence, name= 'attendence'),
+    path('attendance',views.attendance, name= 'attendance'),
     # path('index',views.index, name= 'index'),
     
     path('base',views.base, name= 'base'),

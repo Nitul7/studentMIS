@@ -8,7 +8,7 @@ from attendence_app.models import *
 from .models import *
 
 # @login_required(login_url='/')
-# @login_required(login_url='index.html')
+# @login_required(login_url='login.html')
 
 def loginStaff(request):
     # student: @student00 ,123happy@123
@@ -68,25 +68,40 @@ def base(request):
 
 def profile(request):
     current_user = request.user
+    # return HttpResponse(current_user.first_name)
     context = {
-        'records':Students.objects.filter(user_name = current_user)
+        'records':Students.objects.filter(user_name = current_user),
+        'staff_records':current_user
     }
     return render (request,"profile.html",context)
 
-def attendence(request):
+def attendance(request):
     main_context = {
         "subjects": Subjects.objects.all()
     }
     if request.method == "POST":
         sub_sem = request.POST.get("subject_semister")
         sub_name = request.POST.get("subject_name")
-        semister = int(sub_sem)
-        context = {
-            "students": Students.objects.filter(current_semister=semister)
-        }
-        return render(request, "take_attendence.html", context)
+        if sub_sem is not None:  # Check if sub_sem is not None
+            semester = int(sub_sem)
+            students = Students.objects.filter(current_semister=semester)
+            context = {
+                "students": students
+            }
+            for student in students:
+                is_present = request.POST.get(student.roll)
+                # print(f"Value of is_present for {student.roll}: {is_present}")
+                # return HttpResponse(f" It isS: {is_present}")
+                if is_present == "True":
+                    attendance_record, _ = Attendence.objects.get_or_create(student=student)
+                    attendance_record.present_days += 1
+                    attendance_record.save()
+            return render(request, "take_attendance.html", context)
+        else:
+            return HttpResponse("Semester not provided.")
     else:
-        return render(request, "select_attendence.html", main_context)
+        return render(request, "select_attendance.html", main_context)
+
 
 
 # def faclogin(request):
