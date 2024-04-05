@@ -30,8 +30,7 @@ class Students(BaseModel):
     # 123happy@123
     user_name = models.OneToOneField(get_user_model(),related_name="student_username" ,on_delete=models.CASCADE)
     roll = models.CharField( max_length = 6)
-    current_year = models.CharField(max_length=1)
-    current_semister = models.CharField(max_length=10)
+    batch = models.CharField(max_length=4,default=2078)
     student_faculty = models.CharField(max_length=25)
     student_programe = models.CharField(max_length=25) 
     address = models.CharField(max_length=50)
@@ -44,8 +43,8 @@ class Students(BaseModel):
 class Attendence(BaseModel):
     roll = models.ForeignKey(Students,related_name='students',on_delete=models.CASCADE)
     subjects = models.ForeignKey(Subjects, on_delete=models.CASCADE)
-    present_days = models.IntegerField()
-    absent_days = models.IntegerField()
-    is_present = models.BooleanField(default=False)
+    present_days = models.IntegerField(default=0)
+    absent_days = models.IntegerField(default=0)
+    is_present = models.BooleanField()
     # def __str__(self):
     #     return self.present_days

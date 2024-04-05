@@ -48,14 +48,15 @@
     <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
       <div class="sidebar-sticky pt-3">
         <ul class="nav flex-column">
-          {% comment %} <li class="nav-item">
+          {% if request.user.is_superuser %}
+          <li class="nav-item">
             <a class="nav-link" href="home" >
-              href={% url 'home'  %}
               <span data-feather="home"></span>
               Home 
               <span class="sr-only">(current)</span>
             </a>
-          </li> {% endcomment %}
+          </li>
+          {% endif %}
           <li class="nav-item">
             <a class="nav-link" href = '/profile'>
               {% comment %} href={% url 'staff_home'  %} {% endcomment %}

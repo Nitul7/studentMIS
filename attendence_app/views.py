@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from attendence_app.EmailBackEnd import EmailBackEnd
 from django.contrib import messages
 from attendence_app.models import *
+from django.db import transaction
 from .models import *
 
 # @login_required(login_url='/')
@@ -60,11 +61,10 @@ def home(request):
             }
             return render (request,"staff_index.html",context)
         else:
-            return render (request,"student_index.html")
+            return render (request,"profile.html")
         
 def base(request):
     return render(request, "base.html")
-
 
 def profile(request):
     current_user = request.user
@@ -76,31 +76,62 @@ def profile(request):
     return render (request,"profile.html",context)
 
 def attendance(request):
-    main_context = {
-        "subjects": Subjects.objects.all()
-    }
-    if request.method == "POST":
-        sub_sem = request.POST.get("subject_semister")
-        sub_name = request.POST.get("subject_name")
-        if sub_sem is not None:  # Check if sub_sem is not None
-            semester = int(sub_sem)
-            students = Students.objects.filter(current_semister=semester)
-            context = {
-                "students": students
-            }
-            for student in students:
-                is_present = request.POST.get(student.roll)
-                # print(f"Value of is_present for {student.roll}: {is_present}")
-                # return HttpResponse(f" It isS: {is_present}")
-                if is_present == "True":
-                    attendance_record, _ = Attendence.objects.get_or_create(student=student)
-                    attendance_record.present_days += 1
+    if request.user.is_superuser:
+        print(request.method)
+        if request.method=="POST":
+            sub_name = request.POST.get("select_subject")
+            batch = request.POST.get("select_batch")
+            
+            if sub_name == "choose" or batch == "choose":
+                return HttpResponse("Please select both subject and batch.")
+            
+            students = Students.objects.filter(batch=batch)
+            if "attendance_submit" in request.POST:
+                for student in students:
+                    is_present = request.POST.get(str(student.roll), True)
+                    
+                    if is_present == "True":
+                        student_instance = Students.objects.get(roll=student.roll)
+                        attendance_record, _ = Attendence.objects.get_or_create(
+                            roll_id=student_instance.uid,
+                            # sub_id = Subjects.objects.get(subject = sub_name).uid,
+                            subjects=sub_name,
+                            defaults={'is_present': True}
+                        )
+                        attendance_record.present_days += 1
+                        
+                    else:
+                        student_instance = Students.objects.get(roll=student.roll)
+                        attendance_record, _ = Attendence.objects.get_or_create(
+                            roll_id=student_instance.uid,
+                            subjects_id=sub_name,
+                            defaults={'is_present': False}
+                        )
+                        attendance_record.absent_days += 1
+                    
                     attendance_record.save()
-            return render(request, "take_attendance.html", context)
+                return HttpResponse("Attendance recorded successfully!")
+            else:
+                context = {
+                    "students": students
+                }
+                return render(request, "take_attendance.html", context)
         else:
-            return HttpResponse("Semester not provided.")
+            batches = Students.objects.values_list('batch', flat=True).distinct()
+            main_context = {
+                "subjects": Subjects.objects.all(),
+                "batches": batches
+            }
+            return render(request, "select_attendance.html", main_context)
     else:
-        return render(request, "select_attendance.html", main_context)
+        current_user = request.user
+        students=Students.objects.filter(user_name = current_user)
+        # return HttpResponse(students)
+        context = {
+            "attendences": Attendence.objects.filter(roll__in=students)
+        }
+        return render(request,"my_attendance.html",context )
+
 
 
 
