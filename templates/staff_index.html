@@ -8,23 +8,19 @@
             <table class="table table-striped table-bordered" id="attendance_table">
                 <thead>
                     <tr>
+                        <td>Subject</td>
                         <td>Roll No.</td>
                         <td>Present Days</td>
-                        <td>Absent Days</td>
                         <td>Total Days</td>
                     </tr>
                 </thead>
                 <tbody>
                     {% for attendence in attendences %}
                     <tr>
+                        <td>{{attendence.subjects.subject}}</td>
                         <td>{{attendence.roll}}</td>
                         <td>{{attendence.present_days}}</td>
-                        <td>{{attendence.absent_days}}</td>
-                        <td>
-                            {% with total_days=attendence.absent_days|add:attendence.present_days %}
-                                {{ total_days }}
-                            {% endwith %}
-                        </td>
+                        <td>{{attendence.total_days}}</td>
                     </tr>
                     {% endfor %}
                 </tbody>

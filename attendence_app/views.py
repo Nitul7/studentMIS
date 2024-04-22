@@ -30,7 +30,7 @@ def loginStaff(request):
     return render (request,'login.html')
 
 def loginStudent(request):
-    # student: @student00 ,123happy@123
+    # student: happy ps:@123456789
     if request.method == "POST":
         username = request.POST.get('user_name')
         password = request.POST.get('password')
@@ -56,8 +56,9 @@ def home(request):
         return redirect("/loginStudent")
     else:
         if request.user.is_superuser:
+            attendences = Attendence.objects.all().order_by('subjects__subject', 'roll__roll')
             context = {
-                "attendences": Attendence.objects.all()
+                "attendences": attendences
             }
             return render (request,"staff_index.html",context)
         else:
@@ -75,62 +76,123 @@ def profile(request):
     }
     return render (request,"profile.html",context)
 
+def take_attendance(request):
+    if request.method == "POST":
+        # Get the selected checkbox values from request.POST
+        student_values = request.POST.getlist("attend[]")
+        
+        # Get all student UIDs for attendance tracking
+        all_student_uids = set(student.uid for student in Students.objects.all())
+        
+        # Process each selected value
+        for student_value in student_values:
+            student_uid, sub_name, is_present_str = student_value.split(',')
+            
+            # Convert is_present_str to a boolean
+            is_present = is_present_str.lower() == 'true'
+            
+            # Get the student object using the UID
+            student = Students.objects.get(uid=student_uid)
+            subject_instance, created = Subjects.objects.get_or_create(uid=sub_name)
+            # return HttpResponse(f"{subject_instance} subname {sub_name}")
+            # Get or create attendance record
+            attendance, created = Attendence.objects.get_or_create(roll=student, subjects=subject_instance)
+            
+            # Update present_days or total_days based on is_present value
+            if is_present:
+                attendance.present_days += 1
+            else:
+                attendance.total_days += 1
+            
+            # Save the updated attendance record
+            attendance.save()
+            
+            # Remove student UID from the set of all UIDs
+            all_student_uids.discard(student_uid)
+        
+        # For students who didn't submit a checkbox (considered absent)
+        for student_uid in all_student_uids:
+            student = Students.objects.get(uid=student_uid)
+            subject_instance, created = Subjects.objects.get_or_create(uid=sub_name)
+            attendance, created = Attendence.objects.get_or_create(roll=student, subjects=subject_instance)
+            
+            attendance.total_days += 1
+            attendance.save()
+        
+        # Redirect to a success page or render a response as needed
+        return redirect( "/")
+    else:
+        return render(request, "take_attendance.html")
+
+
+        
+    # if request.method == "POST":
+    #     for student in students:
+    #         is_present = request.POST.get(str(student.roll), True)
+            
+    #         if is_present == "True":
+    #             student_instance = Students.objects.get(roll=student.roll)
+    #             attendance_record, _ = Attendence.objects.get_or_create(
+    #                 roll_id=student_instance.uid,
+    #                 # sub_id = Subjects.objects.get(subject = sub_name).uid,
+    #                 subjects=sub_name,
+    #                 defaults={'is_present': True}
+    #             )
+    #             attendance_record.present_days += 1
+                
+    #         else:
+    #             student_instance = Students.objects.get(roll=student.roll)
+    #             attendance_record, _ = Attendence.objects.get_or_create(
+    #                 roll_id=student_instance.uid,
+    #                 subjects_id=sub_name,
+    #                 defaults={'is_present': False}
+    #             )
+    #             attendance_record.total_days += 1
+            
+    #         attendance_record.save()
+    #     return HttpResponse("Attendance recorded successfully!")
+    # else:
+    #     students = Students.objects.filter(batch=batch)
+    #     context = {
+    #         "students": students
+    #     }
+    #     return render(request, "take_attendance.html", context)    
+
+
 def attendance(request):
     if request.user.is_superuser:
-        print(request.method)
         if request.method=="POST":
             sub_name = request.POST.get("select_subject")
             batch = request.POST.get("select_batch")
-            
             if sub_name == "choose" or batch == "choose":
                 return HttpResponse("Please select both subject and batch.")
-            
-            students = Students.objects.filter(batch=batch)
-            if "attendance_submit" in request.POST:
-                for student in students:
-                    is_present = request.POST.get(str(student.roll), True)
-                    
-                    if is_present == "True":
-                        student_instance = Students.objects.get(roll=student.roll)
-                        attendance_record, _ = Attendence.objects.get_or_create(
-                            roll_id=student_instance.uid,
-                            # sub_id = Subjects.objects.get(subject = sub_name).uid,
-                            subjects=sub_name,
-                            defaults={'is_present': True}
-                        )
-                        attendance_record.present_days += 1
-                        
-                    else:
-                        student_instance = Students.objects.get(roll=student.roll)
-                        attendance_record, _ = Attendence.objects.get_or_create(
-                            roll_id=student_instance.uid,
-                            subjects_id=sub_name,
-                            defaults={'is_present': False}
-                        )
-                        attendance_record.absent_days += 1
-                    
-                    attendance_record.save()
-                return HttpResponse("Attendance recorded successfully!")
             else:
-                context = {
-                    "students": students
+                main_context = {
+                    "sub_name":sub_name,
+                    "batch":batch,
+                    "students":Students.objects.filter(batch=batch)
                 }
-                return render(request, "take_attendance.html", context)
+                return render(request,"take_attendance.html",main_context )
         else:
             batches = Students.objects.values_list('batch', flat=True).distinct()
             main_context = {
                 "subjects": Subjects.objects.all(),
                 "batches": batches
             }
-            return render(request, "select_attendance.html", main_context)
+            return render(request,"select_attendance.html",main_context )
+        user = request.POST.get('attend')
+        print(user)
+        return render(request,"select_attendance.html",main_context )
+        
     else:
         current_user = request.user
         students=Students.objects.filter(user_name = current_user)
         # return HttpResponse(students)
-        context = {
+        main_context = {
             "attendences": Attendence.objects.filter(roll__in=students)
         }
-        return render(request,"my_attendance.html",context )
+        return render(request,"my_attendance.html",main_context )
+    
 
 
 
