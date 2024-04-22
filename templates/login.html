@@ -30,7 +30,7 @@
         {% csrf_token %}
         <input type="text" name="user_name" id="user_name" class="form__input" placeholder="User Name" required autofocus>
         <input class="form__input" type="password" name="password" placeholder="Password" required>
-		  <a href="https://www.facebook.com/Nits.nitul">Forgot your password?</a>
+		  {% comment %} <a href="https://www.facebook.com/Nits.nitul">Forgot your password?</a> {% endcomment %}
           <button>SIGN IN</button>
     </form>
 	</div>
@@ -42,7 +42,7 @@
         <br><br><br><br>
       <input type="text" name="user_name" id="user_name" class="form__input" placeholder="User Name" required autofocus>
       <input class="form__input" type="password" name="password" placeholder="Password" required>
-      <a href="https://www.facebook.com/">Forgot your password?</a>
+      {% comment %} <a href="https://www.facebook.com/">Forgot your password?</a> {% endcomment %}
       <button>SIGN IN</button>
     </form>
 	</div>
@@ -55,7 +55,7 @@
               Khwopa Engineering College 4th Semester Attendence System 🧾
             </p>
             <button class="ghost" id="signIn">Student</button>
-            <button class="host" id="next">Admin</button>
+            {% comment %} <button class="host" id="next">Admin</button> {% endcomment %}
             <br>
             <br>
             <br>

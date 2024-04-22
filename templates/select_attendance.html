@@ -1,17 +1,38 @@
 {% extends 'base.html' %}
 {% block body %}
-<form action="/attendance" method="POST">
-    {% csrf_token %}
-    <select name="subject_name" id = "subject_name" class="form-control">
-        <label for="category" class="form-label">Choose Subject</label>
-        <option value="choose">Choose</option>
-        {% for subject in subjects %}
-            <option value="{{subject.subject}}" name="subject_semister" id="subject_semister">
-                {{subject.subject}}
-                {% comment %} <input type="hidden" name="subject_semister" id="subject_semister" value=" {{subject.subject_semister}}"> {% endcomment %}
-            </option>
-            {% endfor %}
+    <form action="/attendance" method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="attendance_submit"> 
+        <input type="hidden" name="select_subject" id="select_subject" value="">
+        <div>
+            <h3>
+                Select Subject
+            </h3>
+            <select name="select_subject" id = "select_subject" class="form-control">
+                <option value="choose">Choose</option>
+                {% for subject in subjects %}
+                    <option value="{{subject.uid}}" name="select_subject" id="select_subject">
+                        {{subject.subject}}
+                        
+                    </option>
+                {% endfor %}
             </select>
-            <button type="submit">Upload</button>
-</form>
+        </div>
+        <p></p>
+        <div>
+            <h3>
+            Select Batch
+            </h3>
+            <select name="select_batch" id = "select_batch" class="form-control">
+                <option value="choose">Choose</option>
+                {% for batch in batches %}
+                    <option value="{{batch}}" name="select_batch" id="select_batch">
+                        {{batch}}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit" name = "condition_submit">Upload</button>
+    </form>
+    
 {% endblock body %}

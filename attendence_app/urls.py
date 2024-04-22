@@ -10,15 +10,6 @@ urlpatterns = [
     path('home',views.home, name= 'home'),
     path('profile',views.profile, name= 'profile'),
     path('attendance',views.attendance, name= 'attendance'),
-    # path('index',views.index, name= 'index'),
+    path('take_attendance',views.take_attendance, name= 'take_attendance'),
     
-    path('base',views.base, name= 'base'),
-    
-    # path('faclogin',views.faclogin, name= 'faclogin'),
-    
-    # path('staff/home2.html',views.HOME,name='staff_home2'),
-    # path('staff/home.html',views.HOME,name='staff_home'),
-
-
-    # path('logout',views.logout_request, name="logout"),
 ]
