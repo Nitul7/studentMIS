@@ -73,24 +73,7 @@
               <span class="sr-only"></span>
             </a>
           </p>
-          {% comment %} <div class="collapse" id="collapseExample">
-            <div class="card card-body">
-              {% if clas%}
-                <form class="demo"  method="POST">
-                  action={% url 'updatedadd'  %} 
-                  {% csrf_token %}
-                  <select name="classg">
-                    {% for i in clas %}
-                      <option value="{{i.0}}${{i.1}}">{{i.0}} {{i.1}}</option>
-                    {% endfor %}
-                  </select><br><br>
-                  <input value='GO' type="submit">
-                </form>
-              {% else %}
-                <h8>Currently there are no Courses or Classes Assigned to you</h8>
-              {% endif %}
-            </div>
-          </div> {% endcomment %}
+          
         </ul>
       </div>
     </nav>
