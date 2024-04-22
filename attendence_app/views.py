@@ -20,7 +20,7 @@ def loginStaff(request):
         user = authenticate(username=username, password=password)
         if user is not None:# if the user is logged in
             login(request,user)
-            if request.user.is_superuser:
+            if request.user.is_staff:
                 return redirect ('/')
             else:
                 logout(request)
@@ -55,7 +55,7 @@ def home(request):
     if request.user.is_anonymous:
         return redirect("/loginStudent")
     else:
-        if request.user.is_superuser:
+        if (request.user.is_superuser or request.user.is_staff):
             attendences = Attendence.objects.all().order_by('subjects__subject', 'roll__roll')
             context = {
                 "attendences": attendences
@@ -125,42 +125,8 @@ def take_attendance(request):
         return render(request, "take_attendance.html")
 
 
-        
-    # if request.method == "POST":
-    #     for student in students:
-    #         is_present = request.POST.get(str(student.roll), True)
-            
-    #         if is_present == "True":
-    #             student_instance = Students.objects.get(roll=student.roll)
-    #             attendance_record, _ = Attendence.objects.get_or_create(
-    #                 roll_id=student_instance.uid,
-    #                 # sub_id = Subjects.objects.get(subject = sub_name).uid,
-    #                 subjects=sub_name,
-    #                 defaults={'is_present': True}
-    #             )
-    #             attendance_record.present_days += 1
-                
-    #         else:
-    #             student_instance = Students.objects.get(roll=student.roll)
-    #             attendance_record, _ = Attendence.objects.get_or_create(
-    #                 roll_id=student_instance.uid,
-    #                 subjects_id=sub_name,
-    #                 defaults={'is_present': False}
-    #             )
-    #             attendance_record.total_days += 1
-            
-    #         attendance_record.save()
-    #     return HttpResponse("Attendance recorded successfully!")
-    # else:
-    #     students = Students.objects.filter(batch=batch)
-    #     context = {
-    #         "students": students
-    #     }
-    #     return render(request, "take_attendance.html", context)    
-
-
 def attendance(request):
-    if request.user.is_superuser:
+    if (request.user.is_superuser or request.user.is_staff):
         if request.method=="POST":
             sub_name = request.POST.get("select_subject")
             batch = request.POST.get("select_batch")

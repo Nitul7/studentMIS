@@ -48,7 +48,7 @@
     <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
       <div class="sidebar-sticky pt-3">
         <ul class="nav flex-column">
-          {% if request.user.is_superuser %}
+          {% if request.user.is_superuser or request.user.is_staff %}
           <li class="nav-item">
             <a class="nav-link" href="home" >
               <span data-feather="home"></span>

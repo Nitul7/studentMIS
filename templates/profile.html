@@ -13,7 +13,7 @@
         </div>
 <h2 style="text-align:center;">WELCOME TO YOUR PROFILE</h2><br>
 <table>
-    {% if user.is_superuser %}
+    {% if user.is_superuser or user.is_staff %}
         
             <tbody style=" font-size: 20px;">
                 <tr>
